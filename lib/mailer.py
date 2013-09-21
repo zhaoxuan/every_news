@@ -2,12 +2,12 @@ import smtplib
 import time
 from email.mime.text import MIMEText
 
-def mail():
-  mail_body='hello, this is the mail content'
+def mail(body):
+  mail_body=body
   mail_from='john.zhao@i-click.cn'
   mail_to=['363602094@qq.com']
   msg=MIMEText(mail_body)
-  msg['Subject']='this is the title'
+  msg['Subject']='Every day every news'
   msg['From']=mail_from
   msg['To']=';'.join(mail_to)
   msg['date']=time.strftime('%a, %d %b %Y %H:%M:%S %z')
