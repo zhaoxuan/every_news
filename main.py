@@ -5,9 +5,9 @@ if not path in sys.path:
 if not 'mailer' in sys.modules:
   import mailer
 
-import BeautifulSoup
-import urllib2
-import types
+# import BeautifulSoup
+# import urllib2
+# import types
 
 mailer.mail("Hi john\n This is raspberry pi \n I am fine.")
 # url = "http://www.baidu.com"
