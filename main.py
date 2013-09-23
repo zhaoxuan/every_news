@@ -1,5 +1,6 @@
-import sys;
-import os;
+import sys
+import os
+import time
 
 ROOT_PATH = os.getcwd()
 path = ROOT_PATH + "/lib"
@@ -8,7 +9,8 @@ if not path in sys.path:
 if not 'mailer' in sys.modules:
   import mailer
 
-mailer.mail("Hi john\n This is raspberry pi \n I am fine.")
+ts = time.strftime('%a, %d %b %Y %H:%M:%S %z')
+mailer.mail("Hi john\n This is raspberry pi \n I am fine.\n" + ts)
 
 # import BeautifulSoup
 # import urllib2
