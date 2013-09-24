@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python2.7
 
 import time
@@ -11,7 +12,8 @@ def main():
 
     content = html.find('a')
     for item in content:
-        print item
+        print item.text
+
 
 
 
