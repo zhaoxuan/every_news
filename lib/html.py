@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python2.7
 
 import urllib2
@@ -13,7 +14,9 @@ class Html(object):
 
     def get_content(self):
         content = urllib2.urlopen(self.req).read()
-        self.content = BeautifulSoup.BeautifulSoup(content, from_encoding = 'GB18030')
+        # chinese character code
+        content = content.decode('gb2312','ignore')
+        self.content = BeautifulSoup.BeautifulSoup(content)
         return self.content
 
     def find(self, reg):
