@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 –*-
+
 import lib.mailer
 import lib.weather_forecast
-import time
+import sys 
+reload(sys) 
+sys.setdefaultencoding('utf8')
 
-ts = time.strftime('%a, %d %b %Y %H:%M:%S %z')
-# lib.mailer.mail("This is raspberry pi.\n" + ts)
+
 
 wf = lib.weather_forecast.WeatherForecast()
-print wf.get_day_weather()
+today_weather =  wf.get_day_weather()
+lib.mailer.mail("Every thing is OK " + today_weather)
