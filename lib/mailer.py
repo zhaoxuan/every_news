@@ -6,7 +6,9 @@ def mail(body):
   mail_body=body
   mail_from='john.zhao@i-click.cn'
   mail_to=['13522032151@139.com']
-  msg=MIMEText(mail_body)
+  msg=MIMEText(mail_body,format,'utf-8')
+  msg["Accept-Language"]="zh-CN"
+  msg["Accept-Charset"]="ISO-8859-1,utf-8"
   msg['Subject']='Every day every news'
   msg['From']=mail_from
   msg['To']=';'.join(mail_to)
