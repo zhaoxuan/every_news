@@ -1,2 +1,3 @@
 .tag*
 *.pyc
+.DS_Store
