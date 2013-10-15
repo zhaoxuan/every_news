@@ -13,7 +13,7 @@ def main():
     try:
         wf = lib.weather_forecast.WeatherForecast()
         today_weather =  wf.get_day_weather()
-        lib.mailer.mail("Every thing is OK " + today_weather)
+        lib.mailer.mail(today_weather)
         pass
     except Exception, e:
         lib.mailer.mail("Every news has an error {0}".format(str(e)))
