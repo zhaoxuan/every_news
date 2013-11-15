@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 
 def mail(body):
   mail_body=body
-  mail_from='john.zhao@qq.com'
+  mail_from='363602094@qq.com'
   mail_to=['13522032151@139.com']
   msg=MIMEText(mail_body, _subtype='plain', _charset='UTF-8')
   msg['Subject']='Every day every news'
