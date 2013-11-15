@@ -33,7 +33,7 @@ class WeatherForecast(object):
                 weather_html = urllib2.urlopen(self.req).read()
                 weather_json = json.loads(weather_html)
                 weather_info = weather_json['weatherinfo']
-                result = weather_info['city'] + ' Temperature ' + weather_info['temp2'] + '~' + weather_info['temp1']
+                result = weather_info['city'] + ' Temperature ' + weather_info['temp1'] + '~' + weather_info['temp2']
                 return result
             except Exception:
                 if try_times < 3:
