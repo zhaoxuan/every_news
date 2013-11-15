@@ -3,8 +3,8 @@
 
 import lib.mailer
 import lib.weather_forecast
-import sys 
-reload(sys) 
+import sys
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 

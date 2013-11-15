@@ -1,11 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-import urllib2  
+import urllib2
 import simplejson as json
 
 
-class TimeoutException(Exception): 
+class TimeoutException(Exception):
     pass
 
 class WeatherForecast(object):
@@ -25,7 +25,7 @@ class WeatherForecast(object):
         #     'cloud':weather_info['wind1'],
         #     'ziwai':weather_info['index_uv'],
         #     'yifu':weather_info['index_d']
-        # }  
+        # }
         try_times = 3
         for try_times in xrange(1,4):
             try:
