@@ -1,3 +1,4 @@
 .tag*
 *.pyc
 .DS_Store
+log/*
