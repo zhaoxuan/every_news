@@ -9,21 +9,24 @@ class File(object):
         if os.path.isfile(file_path):
             self.file = open(file_path, 'a')
         else:
-            mk_path(file_path)
-
-            self.file = open(file_path, 'w')
+            if self.mk_path(file_path):
+                self.file = open(file_path, 'w')
+            else:
+                raise 'not output file error'
 
     def __del__(self):
-        self.file.close
-        pass
+        if self.file:
+            self.file.close
+            pass
+        else:
+            pass
 
     def mk_path(self, file_path):
-        print file_path
         path = os.path.split(file_path)[0]
-        if os.path.exist(path):
-            os.makedirs(path)
+        if os.path.exists(path):
             return True
         else:
+            os.makedirs(path)
             return False
 
     def write(self, content):
