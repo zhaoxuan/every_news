@@ -6,8 +6,9 @@ import lib.mailer
 import lib.weather_forecast
 from lib.stock import Stock
 from lib.file import File
-import os
+# import os
 import pdb
+from datetime import *
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -17,7 +18,12 @@ ROOT = sys.path[0]
 
 def main():
     param = sys.argv[1]
-    stock()
+    if param == 'weather':
+        weather()
+        pass
+    else:
+        stock()
+        pass
     # try:
     #     if param == 'weather':
     #         weather()
@@ -29,7 +35,6 @@ def main():
     #     raise e
 
 def stock():
-    # info_table = ['name', 'price', 'advance_decline', 'range', 'total', 'amount']
     # st = Stock('sh', '600036')
     # stock_info = st.get_info()
 
@@ -37,9 +42,14 @@ def stock():
     # f.write('\t'.join(stock_info) + '\n')
 
     # f.close
+    now = datetime.now()
+    year = now.strftime('%Y')
+    month = now.strftime('%m')
+    file_name = now.strftime('%Y%m%d%H%M')
+    file_path = '/log/' + year + '/' + month + '/' + file_name + '.tsv'
 
     stocks = open(ROOT + '/log/StockCode', 'r')
-    f = File(ROOT + '/log/stock.txt')
+    f = File(ROOT + file_path)
 
     while True:
         line = stocks.readline()
