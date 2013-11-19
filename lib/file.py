@@ -23,11 +23,8 @@ class File(object):
 
     def mk_path(self, file_path):
         path = os.path.split(file_path)[0]
-        if os.path.exists(path):
-            return True
-        else:
-            os.makedirs(path)
-            return False
+        if not os.path.exists(path): os.makedirs(path)
+        return True
 
     def write(self, content):
         self.file.write(content)
