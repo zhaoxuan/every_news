@@ -53,11 +53,19 @@ class Stock(object):
         # 47  => '涨停价',
         # 48  => '跌停价',
         # 49  => '未知',
+        for try_times in xrange(1,4):
+            try:
+                data = urllib2.urlopen(self.req).read().decode('gb2312')
+                data = re.search('''(")(.+)(")''', data)
+                if data == None:
+                    pass
+                else:
+                    stock_info = data.group(2).split("~")
+                    return stock_info
+            except Exception:
+                if try_times < 3:
+                    print try_times
+                    pass
+                else:
+                    return None
 
-        data = urllib2.urlopen(self.req).read().decode('gb2312')
-        data = re.search('''(")(.+)(")''', data)
-        if data == None:
-            pass
-        else:
-            stock_info = data.group(2).split("~")
-            return stock_info
