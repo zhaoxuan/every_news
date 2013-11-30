@@ -12,6 +12,7 @@ class Stock(object):
         self.exchange = exchange
         # http://hq.sinajs.cn/list=s_sh000001
         # self.data_api = "http://hq.sinajs.cn/list="
+        # use tencent api for getting stock data
         self.data_api = "http://qt.gtimg.cn/q="
         url = self.data_api + self.exchange + self.code
         headers = {'user-agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)'}
