@@ -24,24 +24,8 @@ def main():
     else:
         stock()
         pass
-    # try:
-    #     if param == 'weather':
-    #         weather()
-    #     else:
-    #         stock()
-    #         pass
-    # except Exception, e:
-    #     # lib.mailer.mail("Every news has an error {0}".format(str(e)))
-    #     raise e
 
 def stock():
-    # st = Stock('sh', '600036')
-    # stock_info = st.get_info()
-
-    # f = File(ROOT + '/log/stock.txt')
-    # f.write('\t'.join(stock_info) + '\n')
-
-    # f.close
     now = datetime.now()
     year = now.strftime('%Y')
     month = now.strftime('%m')
@@ -68,6 +52,7 @@ def stock():
 
     f.close
     stocks.close
+    lib.mailer.mail("Stock process has completed")
     pass
 
 def weather():
