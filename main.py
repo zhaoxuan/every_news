@@ -9,6 +9,7 @@ from lib.file import File
 # import os
 import pdb
 from datetime import *
+from concurrent.futures import ThreadPoolExecutor
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -35,25 +36,30 @@ def stock():
     stocks = open(ROOT + '/log/StockCode', 'r')
     f = File(ROOT + file_path)
 
-    while True:
-        line = stocks.readline()
-        if not line:
-            break
-        else:
-            exchange = line[0:2]
-            code = line[2:]
-            st = Stock(exchange, code)
-            stock_info = st.get_info()
-
-            if stock_info == None:
-                pass
+    with ThreadPoolExecutor(max_workers = 10) as executer:
+        while True:
+            line = stocks.readline()
+            if not line:
+                break
             else:
-                f.write('\t'.join(stock_info) + '\n')
+                exchange = line[0:2]
+                code = line[2:]
+                process = executer.submit(get_stock_info, exchange, code)
+                stock_info = process.result()
+
+                if stock_info == None:
+                    pass
+                else:
+                    f.write('\t'.join(stock_info) + '\n')
 
     f.close
     stocks.close
     lib.mailer.mail("Stock process has completed")
     pass
+
+def get_stock_info(exchange, code):
+    st = Stock(exchange, code)
+    return st.get_info()
 
 def weather():
     wf = lib.weather_forecast.WeatherForecast()
