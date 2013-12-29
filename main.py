@@ -10,6 +10,7 @@ from lib.file import File
 import pdb
 from datetime import *
 from concurrent.futures import ThreadPoolExecutor
+import threading
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -27,11 +28,16 @@ def main():
         pass
 
 def stock():
+    if datetime.now().strftime('%Y%m%d%H%M') < '201312291500':
+        threading.Timer(60*5, stock).start()
+        pass
+
     now = datetime.now()
     year = now.strftime('%Y')
     month = now.strftime('%m')
+    day = now.strftime('%d')
     file_name = now.strftime('%Y%m%d%H%M')
-    file_path = '/log/' + year + '/' + month + '/' + file_name + '.tsv'
+    file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
 
     stocks = open(ROOT + '/log/StockCode', 'r')
     f = File(ROOT + file_path)
@@ -50,9 +56,9 @@ def stock():
         for stk in stock_codes:
             executer.submit(get_stock_info, stk[0], stk[1], f)
             pass
+
     f.close
     stocks.close
-    lib.mailer.mail("Stock process has completed")
     pass
 
 def get_stock_info(exchange, code, f):
