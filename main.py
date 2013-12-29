@@ -36,30 +36,34 @@ def stock():
     stocks = open(ROOT + '/log/StockCode', 'r')
     f = File(ROOT + file_path)
 
-    with ThreadPoolExecutor(max_workers = 10) as executer:
-        while True:
+    stock_codes = []
+    while True:
             line = stocks.readline()
             if not line:
                 break
             else:
                 exchange = line[0:2]
                 code = line[2:]
-                process = executer.submit(get_stock_info, exchange, code)
-                stock_info = process.result()
+                stock_codes.append([exchange, code])
 
-                if stock_info == None:
-                    pass
-                else:
-                    f.write('\t'.join(stock_info) + '\n')
-
+    with ThreadPoolExecutor(max_workers = 10) as executer:
+        for stk in stock_codes:
+            executer.submit(get_stock_info, stk[0], stk[1], f)
+            pass
     f.close
     stocks.close
     lib.mailer.mail("Stock process has completed")
     pass
 
-def get_stock_info(exchange, code):
+def get_stock_info(exchange, code, f):
     st = Stock(exchange, code)
-    return st.get_info()
+    stock_info = st.get_info()
+    if stock_info == None:
+        print 'failed ' + exchange + code
+        return 'failed'
+    else:
+        f.write('\t'.join(stock_info) + '\n')
+        return 'successed'
 
 def weather():
     wf = lib.weather_forecast.WeatherForecast()
