@@ -30,7 +30,6 @@ def main():
 def stock():
     if datetime.now().strftime('%Y%m%d%H%M') < '201312291500':
         threading.Timer(60*5, stock).start()
-        pass
 
     now = datetime.now()
     year = now.strftime('%Y')
