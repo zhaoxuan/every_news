@@ -28,7 +28,7 @@ def main():
         pass
 
 def stock():
-    if datetime.now().strftime('%Y%m%d%H%M') < '201312291500':
+    if datetime.now().strftime('%Y%m%d%H%M') < datetime.now().strftime('%Y%m%d') + '1500':
         threading.Timer(60*5, stock).start()
 
     now = datetime.now()
