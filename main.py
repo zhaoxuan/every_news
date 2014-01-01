@@ -29,7 +29,7 @@ def main():
 
 def stock():
     if datetime.now().strftime('%H%M') < '1500':
-        threading.Timer(60*5, stock).start()
+        threading.Timer(60*10, stock).start()
 
     now = datetime.now()
     year = now.strftime('%Y')
