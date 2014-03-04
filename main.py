@@ -43,13 +43,13 @@ def stock():
 
     stock_codes = []
     while True:
-            line = stocks.readline()
-            if not line:
-                break
-            else:
-                exchange = line[0:2]
-                code = line[2:]
-                stock_codes.append([exchange, code])
+        line = stocks.readline()
+        if not line:
+            break
+        else:
+            exchange = line[0:2]
+            code = line[2:]
+            stock_codes.append([exchange, code])
 
     with ThreadPoolExecutor(max_workers = 10) as executer:
         for stk in stock_codes:
