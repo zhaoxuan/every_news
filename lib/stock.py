@@ -1,7 +1,11 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 import urllib2
+from datetime import *
+from lib.file import File
+from concurrent.futures import ThreadPoolExecutor
 import re
+import gl
 
 class Stock(object):
 
@@ -70,3 +74,50 @@ class Stock(object):
                 else:
                     return None
 
+
+    @classmethod
+    def get_stocks(cls, stocks, frequency):
+        if datetime.now().strftime('%H%M') < '1500':
+            threading.Timer(frequency, cls.get_stocks).start()
+
+        now = datetime.now()
+        year = now.strftime('%Y')
+        month = now.strftime('%m')
+        day = now.strftime('%d')
+        file_name = now.strftime('%Y%m%d%H%M')
+        file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
+
+        f = File(gl.ROOT + file_path)
+        stock_codes = cls.parse_stock_info(stocks)
+
+        with ThreadPoolExecutor(max_workers = 10) as executer:
+            for stk in stock_codes:
+                executer.submit(cls.get_stock_info, stk[0], stk[1], f)
+                pass
+
+        f.close()
+        pass
+
+    @classmethod
+    def get_stock_info(cls, exchange, code, f):
+        st = Stock(exchange, code)
+        stock_info = st.get_info()
+        if stock_info == None:
+            print 'failed ' + exchange + code
+            return 'failed'
+        else:
+            f.write('\t'.join(stock_info) + '\n')
+            return 'successed'
+
+    @classmethod
+    def parse_stock_info(cls, stock_file):
+        stock_codes = []
+        while True:
+            line = stock_file.readline()
+            if not line:
+                break
+            else:
+                exchange = line[0:2]
+                code = line[2:]
+                stock_codes.append([exchange, code])
+        return stock_codes

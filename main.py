@@ -11,12 +11,10 @@ import pdb
 from datetime import *
 from concurrent.futures import ThreadPoolExecutor
 import threading
+import lib.gl as gl
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-
-ROOT = sys.path[0]
-
 
 def main():
     param = sys.argv[1]
@@ -24,7 +22,10 @@ def main():
         weather()
         pass
     else:
-        stock()
+        # stock()
+        stocks = open(gl.ROOT + '/log/StockCode', 'r')
+        Stock.get_stocks(stocks, 60*10)
+        stocks.close()
         pass
 
 def stock():
@@ -38,8 +39,8 @@ def stock():
     file_name = now.strftime('%Y%m%d%H%M')
     file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
 
-    stocks = open(ROOT + '/log/StockCode', 'r')
-    f = File(ROOT + file_path)
+    stocks = open(gl.ROOT + '/log/StockCode', 'r')
+    f = File(gl.ROOT + file_path)
 
     stock_codes = []
     while True:
