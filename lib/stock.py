@@ -4,6 +4,7 @@ import urllib2
 from datetime import *
 from lib.file import File
 from concurrent.futures import ThreadPoolExecutor
+import threading
 import re
 import gl
 
@@ -76,9 +77,9 @@ class Stock(object):
 
 
     @classmethod
-    def get_stocks(cls, stocks, frequency):
+    def get_stocks(cls, stocks_path, frequency):
         if datetime.now().strftime('%H%M') < '1500':
-            threading.Timer(frequency, cls.get_stocks).start()
+            threading.Timer(frequency, cls.get_stocks, [stocks_path, frequency]).start()
 
         now = datetime.now()
         year = now.strftime('%Y')
@@ -88,7 +89,9 @@ class Stock(object):
         file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
 
         f = File(gl.ROOT + file_path)
+        stocks = open(stocks_path, 'r')
         stock_codes = cls.parse_stock_info(stocks)
+        stocks.close()
 
         with ThreadPoolExecutor(max_workers = 10) as executer:
             for stk in stock_codes:
