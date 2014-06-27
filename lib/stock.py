@@ -62,11 +62,10 @@ class Stock(object):
         # 48  => '跌停价',
         # 49  => '未知',
 
-        socket.setdefaulttimeout(3)
         for try_times in xrange(1,4):
             try:
                 start = time.time()
-                data = urllib2.urlopen(self.req).read().decode('gb2312')
+                data = urllib2.urlopen(self.req, timeout = 1).read().decode('gb2312')
                 data = re.search('''(")(.+)(")''', data)
                 end = time.time()
                 print("It takes " + str(end - start) + " second")
