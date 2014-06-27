@@ -5,6 +5,8 @@ from datetime import *
 from lib.file import File
 from concurrent.futures import ThreadPoolExecutor
 import threading
+import socket
+import time
 import re
 import gl
 
@@ -59,10 +61,15 @@ class Stock(object):
         # 47  => '涨停价',
         # 48  => '跌停价',
         # 49  => '未知',
+
+        socket.setdefaulttimeout(3)
         for try_times in xrange(1,4):
             try:
+                start = time.time()
                 data = urllib2.urlopen(self.req).read().decode('gb2312')
                 data = re.search('''(")(.+)(")''', data)
+                end = time.time()
+                print("It takes " + str(end - start) + " second")
                 if data == None:
                     pass
                 else:
