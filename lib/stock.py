@@ -99,7 +99,7 @@ class Stock(object):
         stock_codes = cls.parse_stock_info(stocks)
         stocks.close()
 
-        with ThreadPoolExecutor(max_workers = 10) as executer:
+        with ThreadPoolExecutor(max_workers = 5) as executer:
             for stk in stock_codes:
                 executer.submit(cls.get_stock_info, stk[0], stk[1], f)
                 pass
