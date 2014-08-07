@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 import urllib2
 from datetime import *
-from lib.file import File
-from concurrent.futures import ThreadPoolExecutor
+import file_op
+# from concurrent.futures import ThreadPoolExecutor
 import threading
-import socket
+# import socket
 import time
 import re
 import gl
@@ -13,20 +13,15 @@ import gl
 class Stock(object):
 
     """docstring for Stock"""
-    def __init__(self, exchange, code):
+    def __init__(self):
         super(Stock, self).__init__()
-        self.code = code
-        self.exchange = exchange
         # http://hq.sinajs.cn/list=s_sh000001
         # self.data_api = "http://hq.sinajs.cn/list="
         # use tencent api for getting stock data
-        self.data_api = "http://qt.gtimg.cn/q="
-        url = self.data_api + self.exchange + self.code
-        headers = {'user-agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)'}
+        self.url = "http://qt.gtimg.cn/q="
+        self.headers = {'user-agent':'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)'}
 
-        self.req = urllib2.Request(url, headers = headers)
-
-    def get_info(self):
+    def get_info(self, codes):
         # 0   => '未知',
         # 1   => '名字',
         # 2   => '代码',
@@ -61,11 +56,16 @@ class Stock(object):
         # 47  => '涨停价',
         # 48  => '跌停价',
         # 49  => '未知',
+        url = self.url + codes
+        headers = self.headers
+        req = urllib2.Request(url, headers = headers)
 
         for try_times in xrange(1,4):
             try:
                 start = time.time()
-                data = urllib2.urlopen(self.req, timeout = 1).read().decode('gb2312')
+                data = urllib2.urlopen(req, timeout = 1).read().decode('gb2312')
+                print(data)
+                return
                 data = re.search('''(")(.+)(")''', data)
                 end = time.time()
                 print("It takes " + str(end - start) + " second")
@@ -94,25 +94,30 @@ class Stock(object):
         file_name = now.strftime('%Y%m%d%H%M')
         file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
 
-        f = File(gl.ROOT + file_path)
+        f = file_op.File(gl.ROOT + file_path)
         stocks = open(stocks_path, 'r')
         stock_codes = cls.parse_stock_info(stocks)
         stocks.close()
 
-        with ThreadPoolExecutor(max_workers = 10) as executer:
-            for stk in stock_codes:
-                executer.submit(cls.get_stock_info, stk[0], stk[1], f)
+        stks = []
+        for stk in stock_codes:
+            stks.append(stk)
+            if len(stks) == 10:
+                cls.get_stock_info(stks, f)
+                stks = []
                 pass
 
         f.close()
         pass
 
     @classmethod
-    def get_stock_info(cls, exchange, code, f):
-        st = Stock(exchange, code)
-        stock_info = st.get_info()
+    def get_stock_info(cls, codes, f):
+        codes_string = ','.join(codes)
+        st = Stock()
+        stock_info = st.get_info(codes_string)
+
         if stock_info == None:
-            print 'failed ' + exchange + code
+            print 'failed'
             return 'failed'
         else:
             f.write('\t'.join(stock_info) + '\n')
@@ -126,7 +131,8 @@ class Stock(object):
             if not line:
                 break
             else:
-                exchange = line[0:2]
-                code = line[2:]
-                stock_codes.append([exchange, code])
+                # exchange = line[0:2]
+                # code = line[2:]
+                # stock_codes.append([exchange, code])
+                stock_codes.append(line.strip())
         return stock_codes
