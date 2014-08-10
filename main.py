@@ -2,8 +2,6 @@
 # -*- coding: utf-8 –*-
 
 import sys
-# import os
-# import pdb
 import lib.mailer
 import lib.weather_forecast
 from lib.stock import Stock
