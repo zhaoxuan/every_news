@@ -4,7 +4,7 @@ import urllib2
 from datetime import *
 import file_op
 # from concurrent.futures import ThreadPoolExecutor
-import threading
+# import threading
 # import socket
 import time
 import re
@@ -64,15 +64,19 @@ class Stock(object):
             try:
                 start = time.time()
                 data = urllib2.urlopen(req, timeout = 1).read().decode('gb2312')
-                print(data)
-                return
-                data = re.search('''(")(.+)(")''', data)
                 end = time.time()
                 print("It takes " + str(end - start) + " second")
+
                 if data == None:
                     pass
                 else:
-                    stock_info = data.group(2).split("~")
+                    datas = data.strip("\n").split(";")
+                    stock_info = []
+
+                    for d in datas:
+                        if d != "":
+                            stock_info.append(self.parse_single_stk(d))
+
                     return stock_info
             except Exception:
                 if try_times < 3:
@@ -81,9 +85,12 @@ class Stock(object):
                 else:
                     return None
 
+    def parse_single_stk(self, stock_info):
+        return re.search('''(")(.+)(")''', stock_info).group(2).split("~")
+
 
     @classmethod
-    def get_stocks(cls, stocks_path, frequency):
+    def get_stocks(cls, stocks_path, frequency=60*10):
         if datetime.now().strftime('%H%M') < '1500':
             threading.Timer(frequency, cls.get_stocks, [stocks_path, frequency]).start()
 
@@ -100,9 +107,12 @@ class Stock(object):
         stocks.close()
 
         stks = []
-        for stk in stock_codes:
+        stk_len = len(stock_codes)
+        for index, stk in enumerate(stock_codes):
             stks.append(stk)
-            if len(stks) == 10:
+            # set how many stock info got once
+            # TODO
+            if (len(stks) == 30) or (index == stk_len - 1):
                 cls.get_stock_info(stks, f)
                 stks = []
                 pass
@@ -120,7 +130,9 @@ class Stock(object):
             print 'failed'
             return 'failed'
         else:
-            f.write('\t'.join(stock_info) + '\n')
+            for s_i in stock_info:
+                f.write('\t'.join(s_i) + '\n')
+
             return 'successed'
 
     @classmethod
