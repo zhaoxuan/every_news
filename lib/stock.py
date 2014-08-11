@@ -4,7 +4,7 @@ import urllib2
 from datetime import *
 import file_op
 # from concurrent.futures import ThreadPoolExecutor
-# import threading
+import threading
 # import socket
 import time
 import re
@@ -112,7 +112,7 @@ class Stock(object):
             stks.append(stk)
             # set how many stock info got once
             # TODO
-            if (len(stks) == 30) or (index == stk_len - 1):
+            if (len(stks) == 10) or (index == stk_len - 1):
                 cls.get_stock_info(stks, f)
                 stks = []
                 pass
