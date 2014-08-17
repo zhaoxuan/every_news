@@ -5,7 +5,7 @@ import sys
 import lib.mailer
 import lib.weather_forecast
 from lib.stock import Stock
-from datetime import *
+import datetime
 import lib.gl as gl
 
 reload(sys)
@@ -19,6 +19,8 @@ def main():
     else:
         stocks_path = gl.ROOT + '/log/StockCode'
         Stock.get_stocks(stocks_path, 60*10)
+        now = datetime.datetime.now().strftime("%Y-%M-%d")
+        lib.mailer.mail(now + " stock has updated completely.")
         pass
 
 def weather():
