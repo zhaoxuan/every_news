@@ -101,7 +101,7 @@ class Stock(object):
         file_name = now.strftime('%Y%m%d%H%M')
         file_path = '/log/' + year + '/' + month + '/' + day + '/' + file_name + '.tsv'
 
-        f = file_op.File(gl.ROOT + file_path)
+        f = file_op.File(gl.ROOT + file_path, 'a')
         stocks = open(stocks_path, 'r')
         stock_codes = cls.parse_stock_info(stocks)
         stocks.close()
