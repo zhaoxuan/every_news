@@ -4,13 +4,13 @@ import os
 
 class File(object):
     """docstring for File"""
-    def __init__(self, file_path):
+    def __init__(self, file_path, op='r'):
         self.file_path = file_path
         if os.path.isfile(file_path):
-            self.file = open(file_path, 'a')
+            self.file = open(file_path, op)
         else:
             if self.mk_path(file_path):
-                self.file = open(file_path, 'w')
+                self.file = open(file_path, op)
             else:
                 raise 'not output file error'
 
@@ -32,4 +32,8 @@ class File(object):
 
     def close(self):
         self.file.close()
+        pass
+
+    @classmethod
+    def generate_path(cls):
         pass
